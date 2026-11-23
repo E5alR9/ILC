@@ -299,3 +299,14 @@ pub(crate) mod tests {
         assert_eq!(fmt_time(3725.0), "1:02:05");
     }
 }
+
+/// `NANOMIDI_BENCH_FILE=path cargo test --release load_bench -- --ignored --nocapture`
+#[cfg(test)]
+#[test]
+#[ignore = "benchmark; needs NANOMIDI_BENCH_FILE"]
+fn load_bench() {
+    let Ok(path) = std::env::var("NANOMIDI_BENCH_FILE") else { return };
+    let start = std::time::Instant::now();
+    let song = Song::load(Path::new(&path)).expect("load");
+    println!("loaded {} notes / {} events in {:?}", song.note_count, song.events.len(), start.elapsed());
+}

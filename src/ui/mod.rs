@@ -1400,7 +1400,9 @@ impl eframe::App for App {
         self.autosave();
 
         if matches!(self.engine.shared.state(), PlayState::Playing | PlayState::Countdown) {
-            ctx.request_repaint_after(Duration::from_millis(33));
+            // Smooth while you watch; light while the game has focus.
+            let focused = ctx.input(|i| i.viewport().focused.unwrap_or(true));
+            ctx.request_repaint_after(Duration::from_millis(if focused { 33 } else { 80 }));
         }
     }
 
